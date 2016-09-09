@@ -1,0 +1,6 @@
+export const MODAL_SHOW = 'MODAL_SHOW'
+export const MODAL_HIDE = 'MODAL_HIDE'
+export const MODAL_CONFIRM = 'MODAL_CONFIRM'
+export const MODAL_ALERT = 'MODAL_ALERT'
+export const MODAL_CANCEL = 'MODAL_CANCEL'
+export const MODAL_OK = 'MODAL_OK'

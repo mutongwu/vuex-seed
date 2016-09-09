@@ -1,0 +1,4 @@
+export const ADDRESS_LIST = 'ADDRESS_LIST'
+export const ADDRESS_ADD = 'ADDRESS_ADD'
+export const ADDRESS_UPDATE = 'ADDRESS_UPDATE'
+export const ADDRESS_DEL = 'ADDRESS_DEL'

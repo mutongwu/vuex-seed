@@ -9,9 +9,9 @@ let idx = 1
 export default {
   list (cb) {
     reqwest({
-      url: 'http://m.vipday.com/wap/user/getBaseInfo?time=1472819069757',
-      type: 'jsonp',
-      jsonpCallback: 'jsonp'
+      url: '/wap/user/getBaseInfo?time=1472819069757'
+      // type: 'jsonp',
+      // jsonpCallback: 'jsonp'
     }).then(res => console.log(res))
 
     let rnt = _addressLists.reduce((newList, item) => {

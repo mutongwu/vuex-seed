@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import VueRouter from 'vue-router'
 import routeConfig from './routes'
+import auth from './store/modules/auth'
 
 Vue.use(VueRouter)
 
@@ -17,9 +18,18 @@ router.redirect({
 })
 // sync(store, router)
 
+router.beforeEach(function (transition) {
+  console.log('route beforeEach:' + transition.to.auth)
+  if (transition.to.auth === true && !auth.state.isLogin) {
+    let redirect = transition.to.path
+    transition.redirect('/login?redirect=' + redirect)
+  } else if (auth.state.isLogin && transition.to.name === 'login') {
+    transition.redirect('/')
+  } else {
+    transition.next()
+  }
+})
+
 router.start(Vue.extend(App), '#root')
-/* eslint-disable no-new */
-// new Vue({
-//   el: 'body',
-//   components: { App }
-// })
+
+window.globalRouter = router

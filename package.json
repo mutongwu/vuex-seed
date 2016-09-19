@@ -2,7 +2,7 @@
   "name": "vue-seed",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "吴曙锋 <shufeng.wu@vipshop.com>",
+  "author": "shawnwu@qq.com",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",

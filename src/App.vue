@@ -13,10 +13,16 @@
 import store from './store'
 import Tip from 'components/tip'
 import Modal from 'components/modal'
+// import auth from './store/modules/auth'
+import {types} from 'store/constants'
+
 export default {
   components: {
     Modal,
     Tip
+  },
+  ready () {
+    store.dispatch(types.AUTH_CHECK)
   },
   store
 }

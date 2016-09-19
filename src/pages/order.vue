@@ -1,23 +1,13 @@
 <template>
-  <app-header text="个人首页"></app-header>
-  <!--<h1>个人首页</h1>-->
+  <app-header text="订单列表"></app-header>
   <h3><p>Current route path: {{$route.path}}</p></h3>
   <div class="box">a box</div>
-  <div v-if="!isLogin"><a v-link="'login'" class="btn btn-primary">登录</a></div>
-  <ul>
-    <li><a v-link="'order'">我的订单</a></li>
-  </ul>
 </template>
 <script>
 import appHeader from 'components/appHeader'
 export default {
   components: {
     appHeader
-  },
-  vuex: {
-    getters: {
-      isLogin: ({auth}) => auth.isLogin
-    }
   }
 }
 </script>

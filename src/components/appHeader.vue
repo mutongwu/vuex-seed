@@ -37,13 +37,17 @@ export default {
 
 .component-header {
     height: rEm(88);
+    top 0
+    left 0
+    width 100%
     line-height: rEm(88);
     background: #E33123;
     color: #fff;
     text-align: center;
     font-size: rEm(36);
-    position: relative;
-    padding: 0 rEm(100);
+    position: fixed;
+    z-index 10
+    /*padding: 0 rEm(100);*/
     white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
     a {
         position: absolute;

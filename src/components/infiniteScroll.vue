@@ -15,18 +15,24 @@
         type: Number,
         default: 0
       },
-      dataFn: {
+      listData: {
+        type: Array
+      },
+      loadFn: {
         type: Function
+      },
+      plainData: {
+        type: Array
       }
     },
-    init () {
-      console.log('init ...')
-      console.log(this.dataFn, this.rowHeight)
+    ready () {
+      console.log('infiniteScroll ready')
+      console.log(this.plainData, this.rowHeight)
     },
     watch: {
-      dataFn (fn) {
-        console.log('watch dataFn')
-        console.log(fn)
+      plainData (data) {
+        console.log('watch plainData')
+        console.log(data)
       }
     }
   }

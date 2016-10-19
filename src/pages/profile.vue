@@ -8,7 +8,8 @@
     <li><a v-link="'order'">我的订单</a></li>
   </ul>
 
-  <infinite-scroll :data-fn="loadData2">
+  <infinite-scroll v-on:update="dataUpdate" :plain-data="plainData"
+   :load-fn="loadData" :list-data="listData">
     <div class="listBox">
       <div class="listItem" v-for="item in listData">{{item.id}}</div>
     </div>
@@ -46,16 +47,18 @@ export default {
     },
     actions: {
       loadData ({ dispatch }) {
-        this.listData = createData([])
+        this.plainData = createData([])
+        console.log('loadData')
       }
     }
   },
   methods: {
-    loadData2 () {
-      console.log('loadData2')
+    dataUpdate (data) {
+      console.log('dataUpdate' + data)
     }
   },
   ready () {
+    console.log('profile ready')
     this.loadData()
   }
 }

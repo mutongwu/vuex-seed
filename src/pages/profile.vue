@@ -7,17 +7,56 @@
   <ul>
     <li><a v-link="'order'">我的订单</a></li>
   </ul>
+
+  <infinite-scroll :data-fn="loadData2">
+    <div class="listBox">
+      <div class="listItem" v-for="item in listData">{{item.id}}</div>
+    </div>
+  </infinite-scroll>
 </template>
 <script>
 import appHeader from 'components/appHeader'
+import infiniteScroll from 'components/infiniteScroll'
+
+let counter = 0
+function createData (listData) {
+  const temp = []
+  for (let i = listData.length + 1; i <= listData.length + 20; i++) {
+    temp.push({
+      id: counter++
+    })
+  }
+  listData = listData.concat(temp)
+  return listData
+}
+
 export default {
   components: {
-    appHeader
+    appHeader,
+    infiniteScroll
+  },
+  data () {
+    return {
+      listData: null
+    }
   },
   vuex: {
     getters: {
       isLogin: ({auth}) => auth.isLogin
+    },
+    actions: {
+      loadData ({ dispatch }) {
+        this.listData = createData([])
+      }
     }
+  },
+  methods: {
+    loadData2 () {
+      console.log('loadData2')
+    }
+  },
+  ready () {
+    this.loadData()
   }
 }
 </script>
@@ -30,4 +69,11 @@ export default {
     background #ccc
     width 50px
     height 50px
+
+  .listBox
+    padding 10px
+    .listItem
+      border 1px solid green
+      height 100px
+      margin 10px 0
 </style>

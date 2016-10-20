@@ -8,9 +8,9 @@
     <li><a v-link="'order'">我的订单</a></li>
   </ul>
 
-  <infinite-scroll :data-fn="loadData2">
+  <infinite-scroll :kick-start="kickStart" row-selector=".listItem" :distance="distance">
     <div class="listBox">
-      <div class="listItem" v-for="item in listData">{{item.id}}</div>
+      <div class="listItem" v-for="item in listData" track-by='id'>{{item.id}}</div>
     </div>
   </infinite-scroll>
 </template>
@@ -19,17 +19,16 @@ import appHeader from 'components/appHeader'
 import infiniteScroll from 'components/infiniteScroll'
 
 let counter = 0
-function createData (listData) {
+function createData () {
   const temp = []
-  for (let i = listData.length + 1; i <= listData.length + 20; i++) {
+  for (let i = 0; i <= 20; i++) {
     temp.push({
       id: counter++
     })
   }
-  listData = listData.concat(temp)
-  return listData
+  return temp
 }
-
+// console.log(createData())
 export default {
   components: {
     appHeader,
@@ -37,26 +36,46 @@ export default {
   },
   data () {
     return {
-      listData: null
+      listData: [],
+      distance: 20,
+      kickStart: false
     }
   },
+  // plainData: null,
   vuex: {
     getters: {
       isLogin: ({auth}) => auth.isLogin
     },
     actions: {
       loadData ({ dispatch }) {
-        this.listData = createData([])
+        console.log('loadData')
+        setTimeout(() => {
+          var org = createData()
+          // console.log('org', org)
+          infiniteScroll.eventHub.$emit('addData', org)
+          this.listData = this.listData.concat(org)
+        }, 1000)
       }
     }
   },
   methods: {
-    loadData2 () {
-      console.log('loadData2')
+    onScroll () {
+      console.log('onScroll')
+      this.loadData()
+    },
+    dataUpdate (data) {
+      // console.log('data.length', data.length)
+      this.listData = data// this.listData.concat(data)
+      this.$nextTick(() => {
+        infiniteScroll.eventHub.$emit('renderData')
+      })
     }
   },
   ready () {
-    this.loadData()
+    console.log('profile ready')
+    infiniteScroll.eventHub.$on('updateData', this.dataUpdate)
+    infiniteScroll.eventHub.$on('onScroll', this.onScroll)
+    this.kickStart = true
   }
 }
 </script>

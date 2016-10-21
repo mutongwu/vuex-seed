@@ -96,6 +96,11 @@
   console.log(getHeight, setHeight)
 
   export default {
+    data () {
+      return {
+        emptyArray: []
+      }
+    },
     props: {
       rowHeight: {
         type: Number,
@@ -109,14 +114,14 @@
         default: 0
       },
       records: {
+        type: Array,
+        default: []
+      },
+      newRecords: {
         type: Array
       },
-      // dataUpdate: {
-      //   type: Function
-      // },
-      kickStart: {
-        type: Boolean,
-        default: false
+      onscroll: {
+        type: Function
       },
       displayData: {
         type: Array
@@ -127,23 +132,16 @@
       // console.log('infinite ready ...')
       // console.log(eventHub)
       eventHub.$on('addData', this.recvData)
-      eventHub.$on('renderData', this.renderData)
+      // eventHub.$on('renderData', this.renderData)
       // console.log(this.onScroll, this.rowHeight)
     },
     methods: {
       recvData (data) {
         console.log('recvData', data)
-
-        if (!this.allDataCache) {
-          this.allDataCache = []
-        }
-        this.allDataCache = this.allDataCache.concat(data)
-
-        // if (!this.records) {
-        //   this.records = [].concat(data)
+        // if (!this.allDataCache) {
+        //   this.allDataCache = []
         // }
-        // console.log(data)
-        // this.dataUpdate(data)
+        // this.allDataCache = this.allDataCache.concat(data)
       },
       _doCheck () {
         var scrollEventTarget = this.scrollEventTarget
@@ -256,7 +254,8 @@
         }
       },
       _onScroll () {
-        eventHub.$emit('onScroll')
+        // call prop function
+        this.onscroll()
       },
       _initTimer () {
         this.timer = 1
@@ -279,7 +278,7 @@
         //   }
         // }
       },
-      renderData () {
+      _initBase () {
         let el = this.$el
         if (!this.rowHeight) {
           let itemEl = this.$el.querySelector(this.rowSelector)
@@ -308,12 +307,29 @@
         }
         // console.log(this.scrollEventTarget)
         // console.log(getScrollEventTarget, getElementTop, getVisibleHeight, requestAnimationFrame)
+      },
+      _mergeRecords (srcArr, newArr) {
+        // vue 只检测被包装过的对象方法。这里如果直接使用 Array.prototype.push 方法，vue无法侦测到变化。
+        this.emptyArray.push.apply(srcArr, newArr)
       }
     },
     watch: {
-      kickStart (val) {
+      newRecords (data) {
+        if (data) {
+          if (!this.allDataCache) {
+            this.allDataCache = []
+          }
+          this.allDataCache = this.allDataCache.concat(data)
+          this._mergeRecords(this.records, data)
+        }
+      },
+      records (val) {
         if (val) {
-          this._onScroll()
+          console.log('records change')
+          // this._initBase()
+          Vue.nextTick(() => {
+            this._initBase()
+          })
         }
       }
     }

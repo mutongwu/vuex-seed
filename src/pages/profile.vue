@@ -8,7 +8,7 @@
     <li><a v-link="'order'">我的订单</a></li>
   </ul>
 
-  <infinite-scroll :kick-start="kickStart" row-selector=".listItem" :distance="distance" :records.sync="listData">
+  <infinite-scroll :onscroll="onscroll" :new-records="newRecords" row-selector=".listItem" :distance="distance" :records.sync="listData">
     <div class="listBox">
       <div class="listItem" v-for="item in listData" track-by='id'>{{item.id}}</div>
     </div>
@@ -37,8 +37,8 @@ export default {
   data () {
     return {
       listData: [],
-      distance: 20,
-      kickStart: false
+      newRecords: null,
+      distance: 20
     }
   },
   // plainData: null,
@@ -50,27 +50,20 @@ export default {
       loadData ({ dispatch }) {
         console.log('loadData')
         setTimeout(() => {
-          var org = createData()
-          // console.log('org', org)
-          infiniteScroll.eventHub.$emit('addData', org)
-          this.listData = this.listData.concat(org)
-          this.$nextTick(() => {
-            infiniteScroll.eventHub.$emit('renderData')
-          })
+          this.newRecords = createData()
         }, 1000)
       }
     }
   },
   methods: {
-    onScroll () {
-      console.log('onScroll')
+    onscroll () {
+      console.log('onscroll-onscroll')
       this.loadData()
     }
   },
   ready () {
     console.log('profile ready')
-    infiniteScroll.eventHub.$on('onScroll', this.onScroll)
-    this.kickStart = true
+    this.loadData()
   }
 }
 </script>

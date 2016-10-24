@@ -8,7 +8,7 @@
     <li><a v-link="'order'">我的订单</a></li>
   </ul>
 
-  <infinite-scroll :onscroll="onscroll" :new-records="newRecords" row-selector=".listItem" :distance="distance" :records.sync="listData">
+  <infinite-scroll :onscroll="onscroll" :new-records="newRecords" row-selector=".listItem" :distance="distance" :records="listData" :items-per-row="2">
     <div class="listBox">
       <div class="listItem" v-for="item in listData" track-by='id'>{{item.id}}</div>
     </div>
@@ -51,6 +51,7 @@ export default {
         console.log('loadData')
         setTimeout(() => {
           this.newRecords = createData()
+          console.log('total:' + counter)
         }, 1000)
       }
     }
@@ -79,8 +80,23 @@ export default {
 
   .listBox
     padding 10px
+    /*display flex
+    justify-content space-between
+    flex-wrap wrap*/
+    /* 注意，如果使用float来布局元素，要求父元素需要有清除浮动的样式，从而可以正确获得高度计算 */
+    &:after
+      content: " "
+      display: block
+      clear: both
+      height: 0
     .listItem
       border 1px solid green
+      width 49%
       height 100px
       margin 10px 0
+      box-sizing border-box
+      float left
+      &:nth-of-type(even)
+        float right
+
 </style>
